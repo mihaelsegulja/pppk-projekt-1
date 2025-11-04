@@ -6,7 +6,7 @@ namespace Orm.Core.Database;
 public class DatabaseConnection : IDisposable
 {
     private readonly string _connectionString;
-    private NpgsqlConnection _connection;
+    private NpgsqlConnection? _connection;
 
     public DatabaseConnection(string connectionString)
     {
@@ -15,8 +15,7 @@ public class DatabaseConnection : IDisposable
 
     public IDbConnection Open()
     {
-        if (_connection == null)
-            _connection = new NpgsqlConnection(_connectionString);
+        _connection ??= new NpgsqlConnection(_connectionString);
 
         if (_connection.State != ConnectionState.Open)
             _connection.Open();
