@@ -5,15 +5,10 @@ namespace Orm.Core.Attributes;
 [AttributeUsage(AttributeTargets.Property)]
 public class ColumnAttribute : Attribute
 {
-    public string Name { get; }
+    public string? Name { get; }
 
-    public ColumnAttribute()
+    public ColumnAttribute(string? name = null)
     {
-        Name = NamingHelper.ToSnakeCase(GetType().Name);
-    }
-
-    public ColumnAttribute(string? name)
-    {
-        Name = name ?? NamingHelper.ToSnakeCase(GetType().Name);
+        Name = name;
     }
 }

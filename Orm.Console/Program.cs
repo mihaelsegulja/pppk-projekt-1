@@ -7,7 +7,8 @@ DotEnv.Load();
 
 try
 {
-    using var db = new DatabaseConnection(DatabaseConfig.getConnectionString());
+    var connStr = DatabaseConfig.GetConnectionString();
+    using var db = new DatabaseConnection(connStr);
     using var conn = db.Open();
     Console.WriteLine("Connection successful!");
 }
