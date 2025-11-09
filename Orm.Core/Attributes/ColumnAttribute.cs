@@ -14,6 +14,6 @@ public class ColumnAttribute : Attribute
 
     public ColumnAttribute(string? name)
     {
-        Name = name;
+        Name = name ?? NamingHelper.ToSnakeCase(GetType().Name);
     }
 }
