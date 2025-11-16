@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Orm.Core.Attributes;
+﻿namespace Orm.Core.Attributes;
 
 [AttributeUsage(AttributeTargets.Property)]
 public class DefaultAttribute : Attribute
 {
-    public object Value { get; }
+    public object Value { get; set; }
 
     public DefaultAttribute(object value)
     {
