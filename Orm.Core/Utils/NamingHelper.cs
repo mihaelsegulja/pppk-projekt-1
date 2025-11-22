@@ -1,7 +1,7 @@
 ﻿using System.Text;
 
 namespace Orm.Core.Utils;
-public static class NamingHelper
+internal static class NamingHelper
 {
     public static string ToSnakeCase(string input)
     {

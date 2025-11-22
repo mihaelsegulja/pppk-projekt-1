@@ -1,7 +1,5 @@
 ﻿using dotenv.net;
-using Orm.Console;
-using Orm.Core.Database;
-using Orm.Core.Mapping;
+using Orm.Core;
 
 Console.WriteLine("Testing PostgreSQL connection...");
 
@@ -9,12 +7,12 @@ DotEnv.Load();
 
 try
 {
-    var connStr = DatabaseConfig.GetConnectionString();
-    using var db = new DatabaseConnection(connStr);
-    using var conn = db.Open();
+    var connStr = Environment.GetEnvironmentVariable("PPPK_CONN")
+        ?? throw new Exception("Missing conn string");
+
+    using var db = new OrmClient(connStr);
     Console.WriteLine("Connection successful!");
-    EntityMapper w =  new EntityMapper();
-    w.MapEntity(typeof(Patient));
+    
 }
 catch (Exception ex)
 {

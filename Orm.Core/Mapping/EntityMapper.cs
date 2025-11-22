@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 using Orm.Core.Attributes;
 using Orm.Core.Models;
@@ -6,10 +5,8 @@ using Orm.Core.Utils;
 
 namespace Orm.Core.Mapping;
 
-public class EntityMapper
+internal class EntityMapper
 {
-    public EntityMetadata EntityMetadata { get; set; }
-
     public EntityMetadata MapEntity(Type type)
     {
         var metadata = new EntityMetadata

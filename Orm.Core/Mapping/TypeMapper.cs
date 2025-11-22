@@ -1,6 +1,6 @@
 namespace Orm.Core.Mapping;
 
-public class TypeMapper
+internal class TypeMapper
 {
     public static string ToDbType(Type type) => type switch
     {

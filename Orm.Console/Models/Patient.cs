@@ -1,6 +1,6 @@
 ﻿using Orm.Core.Attributes;
 
-namespace Orm.Console;
+namespace Orm.Console.Models;
 
 [Table]
 public class Patient

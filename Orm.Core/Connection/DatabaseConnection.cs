@@ -1,9 +1,9 @@
 ﻿using Npgsql;
 using System.Data;
 
-namespace Orm.Core.Database;
+namespace Orm.Core.Connection;
 
-public class DatabaseConnection : IDisposable
+internal class DatabaseConnection : IDisposable
 {
     private readonly string _connectionString;
     private NpgsqlConnection? _connection;

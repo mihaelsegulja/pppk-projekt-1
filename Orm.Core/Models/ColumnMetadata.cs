@@ -2,7 +2,7 @@ using System.Reflection;
 
 namespace Orm.Core.Models;
 
-public record ColumnMetadata
+internal class ColumnMetadata
 {
     public PropertyInfo Property { get; set; }
     public string ColumnName { get; set; }
