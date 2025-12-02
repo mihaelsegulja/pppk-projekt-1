@@ -4,23 +4,43 @@ using Orm.Core.SqlGenerator;
 
 namespace Orm.Core;
 
-public class OrmClient : IDisposable
+public class OrmClient : IDisposable, IOrmClient
 {
     private readonly DatabaseConnection _conn;
     private readonly EntityMapper _mapper;
-    private readonly CreateTableGenerator _createTable;
 
     public OrmClient(string connectionString)
     {
         _conn = new DatabaseConnection(connectionString);
         _mapper = new EntityMapper();
-        _createTable = new CreateTableGenerator();
     }
 
     public void CreateTable<T>()
     {
         var metadata = _mapper.MapEntity(typeof(T));
-        var sql = _createTable.CreateTable(metadata);
+        var sql = CreateTableGenerator.CreateTable(metadata);
+        ExecuteNonQuery(sql);
+    }
+
+    public void Insert<T>(T entity)
+    {
+        var metadata = _mapper.MapEntity(typeof(T));
+        var sql = InsertGenerator.Insert(entity, metadata);
+        ExecuteNonQuery(sql);
+    }
+
+    public void DeleteById<T>(object id)
+    {
+        var metadata = _mapper.MapEntity(typeof(T));
+        var pk = metadata.PrimaryKey;
+        var sql = DeleteGenerator.Delete(metadata.TableName, pk.ColumnName, id);
+        ExecuteNonQuery(sql);
+    }
+
+    public void DeleteWhere<T>(string columnName, object value)
+    {
+        var metadata = _mapper.MapEntity(typeof(T));
+        var sql = DeleteGenerator.Delete(metadata.TableName, columnName, value);
         ExecuteNonQuery(sql);
     }
 
@@ -35,5 +55,6 @@ public class OrmClient : IDisposable
     public void Dispose()
     {
         _conn.Dispose();
+        GC.SuppressFinalize(this);
     }
 }

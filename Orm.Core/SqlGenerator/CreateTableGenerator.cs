@@ -6,7 +6,7 @@ namespace Orm.Core.SqlGenerator;
 
 internal class CreateTableGenerator
 {
-    public string CreateTable(EntityMetadata entityMetadata, bool ifNotExists = true)
+    public static string CreateTable(EntityMetadata entityMetadata, bool ifNotExists = true)
     {
         var sql = new StringBuilder();
         var condition = ifNotExists ? "IF NOT EXISTS" : string.Empty;
@@ -36,7 +36,7 @@ internal class CreateTableGenerator
             }
             if (column.DefaultValue != null)
             {
-                columnDef.Append($" DEFAULT {ToSqlHelper.FormatDefaultValue(column.DefaultValue)}");
+                columnDef.Append($" DEFAULT {ToSqlHelper.FormatValue(column.DefaultValue)}");
             }
 
             columnDefinitions.Add(columnDef.ToString());
