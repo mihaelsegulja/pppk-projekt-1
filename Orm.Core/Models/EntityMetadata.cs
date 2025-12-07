@@ -6,4 +6,5 @@ internal class EntityMetadata
     public string TableName { get; set; }
     public List<ColumnMetadata> Columns { get; set; }
     public ColumnMetadata PrimaryKey { get; set; }
+    public List<ColumnMetadata> ForeignKeys { get; set; }
 }

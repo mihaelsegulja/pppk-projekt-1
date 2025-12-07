@@ -1,6 +1,4 @@
 namespace Orm.Core.Attributes;
 
 [AttributeUsage(AttributeTargets.Property)]
-public class NotNullAttribute : Attribute
-{
-}
+public class NotNullAttribute : Attribute;

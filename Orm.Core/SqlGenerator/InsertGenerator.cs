@@ -3,7 +3,7 @@ using Orm.Core.Utils;
 
 namespace Orm.Core.SqlGenerator;
 
-internal class InsertGenerator
+internal static class InsertGenerator
 {
     public static string Insert<T>(T? entity, EntityMetadata metadata)
     {
@@ -22,8 +22,8 @@ internal class InsertGenerator
             columnValues.Add(sqlValue);
         }
 
-        var names = string.Join(", ", columnNames);
-        var values = string.Join(", ", columnValues);
+        var names = string.Join(",\n", columnNames);
+        var values = string.Join(",\n", columnValues);
 
         return $"INSERT INTO {metadata.TableName} ({names}) VALUES ({values});";
     }

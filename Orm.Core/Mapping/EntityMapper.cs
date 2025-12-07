@@ -23,6 +23,9 @@ internal class EntityMapper
 
             if (column.IsPrimaryKey)
                 metadata.PrimaryKey = column;
+            
+            if (column.IsForeignKey)
+                metadata.ForeignKeys.Add(column);
         }
 
         return metadata.PrimaryKey == null ? 
@@ -47,6 +50,7 @@ internal class EntityMapper
         var notNullAttr = property.GetCustomAttribute<NotNullAttribute>();
         var uniqueAttr = property.GetCustomAttribute<UniqueAttribute>();
         var defaultAttr = property.GetCustomAttribute<DefaultAttribute>();
+        var fkAttr = property.GetCustomAttribute<ForeignKeyAttribute>();
 
         string columnName =
             columnAttr?.Name ??
@@ -56,8 +60,10 @@ internal class EntityMapper
         bool isAutoInc = pkAttr?.AutoIncrement ?? false;
         bool isNotNull = notNullAttr != null || isPrimary;
         bool isUnique = uniqueAttr != null;
+        bool isForeignKey = fkAttr != null;
+        Type? fkType = fkAttr?.ReferencedType;
 
-        string dbType = TypeMapper.ToDbType(property.PropertyType);
+        string dbType = ToSqlHelper.ToDbType(property.PropertyType);
 
         return new ColumnMetadata
         {
@@ -69,7 +75,9 @@ internal class EntityMapper
             IsAutoIncrement = isAutoInc,
             IsNotNull = isNotNull,
             IsUnique = isUnique,
-            DefaultValue = defaultAttr?.Value
+            DefaultValue = defaultAttr?.Value,
+            IsForeignKey = isForeignKey,
+            ForeignKeyReferenceType = fkType,
         };
     }
 }

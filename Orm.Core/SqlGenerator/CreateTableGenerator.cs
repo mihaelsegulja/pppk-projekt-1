@@ -1,6 +1,7 @@
 ﻿using Orm.Core.Models;
 using Orm.Core.Utils;
 using System.Text;
+using Orm.Core.Mapping;
 
 namespace Orm.Core.SqlGenerator;
 
@@ -41,7 +42,24 @@ internal class CreateTableGenerator
 
             columnDefinitions.Add(columnDef.ToString());
         }
+        
+        var fkConstraints = new List<string>();
 
+        foreach (var fk in entityMetadata.ForeignKeys)
+        {
+            var referencedTable = NamingHelper.ToSnakeCase(fk.ForeignKeyReferenceType!.Name);
+
+            var refMetadata = new EntityMapper().MapEntity(fk.ForeignKeyReferenceType);
+            var referencedColumn = refMetadata.PrimaryKey.ColumnName;
+
+            fkConstraints.Add(
+                $"FOREIGN KEY ({fk.ColumnName}) REFERENCES {referencedTable}({referencedColumn})"
+            );
+        }
+
+        if (fkConstraints.Count != 0)
+            columnDefinitions.AddRange(fkConstraints);
+        
         sql.AppendLine(string.Join(",\n", columnDefinitions));
         sql.AppendLine(");");
 

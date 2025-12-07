@@ -13,4 +13,6 @@ internal class ColumnMetadata
     public bool IsNotNull { get; set; }
     public bool IsUnique { get; set; }
     public object? DefaultValue { get; set; }
+    public bool IsForeignKey { get; set; }
+    public Type? ForeignKeyReferenceType { get; set; }
 }
