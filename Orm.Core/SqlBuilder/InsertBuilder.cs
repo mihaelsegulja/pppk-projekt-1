@@ -1,9 +1,9 @@
 ﻿using Orm.Core.Models;
 using Orm.Core.Utils;
 
-namespace Orm.Core.SqlGenerator;
+namespace Orm.Core.SqlBuilder;
 
-internal static class InsertGenerator
+internal static class InsertBuilder
 {
     public static string Insert<T>(T? entity, EntityMetadata metadata)
     {

@@ -40,7 +40,7 @@ internal class EntityMapper
         if (tableAttr != null && !string.IsNullOrWhiteSpace(tableAttr.Name))
             return tableAttr.Name;
 
-        return NamingHelper.ToSnakeCase(type.Name);
+        return NamingHelper.PascalCaseToSnakeCase(type.Name);
     }
     
     private static ColumnMetadata BuildColumnMetadata(PropertyInfo property)
@@ -54,7 +54,7 @@ internal class EntityMapper
 
         string columnName =
             columnAttr?.Name ??
-            NamingHelper.ToSnakeCase(property.Name);
+            NamingHelper.PascalCaseToSnakeCase(property.Name);
 
         bool isPrimary = pkAttr != null;
         bool isAutoInc = pkAttr?.AutoIncrement ?? false;

@@ -8,7 +8,7 @@ public enum AppointmentType
 }
 
 [Table(Name = "appointment")]
-public class SpecialistAppointment
+public class Appointment
 {
     [PrimaryKey(AutoIncrement = true)]
     public int Id { get; set; }

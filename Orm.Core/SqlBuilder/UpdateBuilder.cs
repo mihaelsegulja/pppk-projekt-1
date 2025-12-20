@@ -1,9 +1,9 @@
 ﻿using Orm.Core.Models;
 using Orm.Core.Utils;
 
-namespace Orm.Core.SqlGenerator;
+namespace Orm.Core.SqlBuilder;
 
-internal static class UpdateGenerator
+internal static class UpdateBuilder
 {
     public static string Update<T>(T entity, EntityMetadata entityMetadata)
     {

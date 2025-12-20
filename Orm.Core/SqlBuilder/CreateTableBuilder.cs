@@ -1,11 +1,11 @@
-﻿using Orm.Core.Models;
-using Orm.Core.Utils;
-using System.Text;
+﻿using System.Text;
 using Orm.Core.Mapping;
+using Orm.Core.Models;
+using Orm.Core.Utils;
 
-namespace Orm.Core.SqlGenerator;
+namespace Orm.Core.SqlBuilder;
 
-internal class CreateTableGenerator
+internal static class CreateTableBuilder
 {
     public static string CreateTable(EntityMetadata entityMetadata, bool ifNotExists = true)
     {
@@ -47,7 +47,7 @@ internal class CreateTableGenerator
 
         foreach (var fk in entityMetadata.ForeignKeys)
         {
-            var referencedTable = NamingHelper.ToSnakeCase(fk.ForeignKeyReferenceType!.Name);
+            var referencedTable = NamingHelper.PascalCaseToSnakeCase(fk.ForeignKeyReferenceType!.Name);
 
             var refMetadata = new EntityMapper().MapEntity(fk.ForeignKeyReferenceType);
             var referencedColumn = refMetadata.PrimaryKey.ColumnName;

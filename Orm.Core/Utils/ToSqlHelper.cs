@@ -1,4 +1,6 @@
-﻿namespace Orm.Core.Utils;
+﻿using Orm.Core.Models;
+
+namespace Orm.Core.Utils;
 
 internal static class ToSqlHelper
 {
@@ -14,20 +16,40 @@ internal static class ToSqlHelper
         _ when type == typeof(DateTime) => "TIMESTAMP WITHOUT TIME ZONE",
         _ when type == typeof(DateTimeOffset) => "TIMESTAMP WITH TIME ZONE",
         _ when type == typeof(Guid) => "UUID",
-        _ => throw new NotSupportedException($"Unsupported .NET type: {type}")
+        _ => throw new NotSupportedException($"Unsupported type: {type}")
     };
     
-    public static string FormatValue(object? value)
+    public static string FormatValue(object? value) => value switch
     {
-        return value switch
-        {
-            null => "NULL",
-            string s => $"'{s.Replace("'", "''")}'",
-            char c => $"'{c}'",
-            bool b => b ? "TRUE" : "FALSE",
-            DateTime dt => $"'{dt:yyyy-MM-dd HH:mm:ss}'",
-            DateTimeOffset dto => $"'{dto:yyyy-MM-dd HH:mm:sszzz}'",
-            _ => value.ToString() ?? "NULL"
-        };
-    }
+        null => "NULL",
+        string s => $"'{s.Replace("'", "''")}'",
+        char c => $"'{c}'",
+        bool b => b ? "TRUE" : "FALSE",
+        DateTime dt => $"'{dt:yyyy-MM-dd HH:mm:ss}'",
+        DateTimeOffset dto => $"'{dto:yyyy-MM-dd HH:mm:sszzz}'",
+        _ => value.ToString() ?? "NULL"
+    };
+
+    public static string ToSqlConditionalOperator(SqlConditionOperatorType op) => op switch
+    {
+        SqlConditionOperatorType.Eq => "=",
+        SqlConditionOperatorType.Neq => "<>",
+        SqlConditionOperatorType.Gt => ">",
+        SqlConditionOperatorType.Gte => ">=",
+        SqlConditionOperatorType.Lt => "<",
+        SqlConditionOperatorType.Lte => "<=",
+        SqlConditionOperatorType.Like => "LIKE",
+        SqlConditionOperatorType.NotLike => "NOT LIKE",
+        _ => throw new NotSupportedException($"Unsupported conditional operator: {op}")
+    };
+    
+    public static string ToSqlOrder(OrderByType order) =>
+        order == OrderByType.Asc ? "ASC" : "DESC";
+
+    public static string ToSqlLogicalOperator(SqlLogicalOperatorType op) => op switch
+    {
+        SqlLogicalOperatorType.And => "AND",
+        SqlLogicalOperatorType.Or => "OR",
+        _ => throw new NotSupportedException($"Unsupported logical operator: {op}")
+    };
 }

@@ -3,7 +3,7 @@
 namespace Orm.Core.Utils;
 internal static class NamingHelper
 {
-    public static string ToSnakeCase(string input)
+    public static string PascalCaseToSnakeCase(string input)
     {
         if (string.IsNullOrEmpty(input))
             return input;
