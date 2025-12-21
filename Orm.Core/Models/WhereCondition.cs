@@ -24,4 +24,6 @@ public enum SqlConditionOperatorType
     Lte,
     Like,
     NotLike,
+    In,
+    NotIn,
 }

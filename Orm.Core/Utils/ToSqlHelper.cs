@@ -27,7 +27,8 @@ internal static class ToSqlHelper
         bool b => b ? "TRUE" : "FALSE",
         DateTime dt => $"'{dt:yyyy-MM-dd HH:mm:ss}'",
         DateTimeOffset dto => $"'{dto:yyyy-MM-dd HH:mm:sszzz}'",
-        _ => value.ToString() ?? "NULL"
+        IEnumerable<object> ie => $"({string.Join(", ", ie.Select(FormatValue))})",
+        _ => value.ToString()!
     };
 
     public static string ToSqlConditionalOperator(SqlConditionOperatorType op) => op switch
@@ -40,6 +41,8 @@ internal static class ToSqlHelper
         SqlConditionOperatorType.Lte => "<=",
         SqlConditionOperatorType.Like => "LIKE",
         SqlConditionOperatorType.NotLike => "NOT LIKE",
+        SqlConditionOperatorType.In => "IN",
+        SqlConditionOperatorType.NotIn => "NOT IN",
         _ => throw new NotSupportedException($"Unsupported conditional operator: {op}")
     };
     

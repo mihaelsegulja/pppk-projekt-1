@@ -16,4 +16,7 @@ public class DiseaseHistory
 
     public DateTime? StartDate { get; set; }
     public DateTime? EndDate { get; set; }
+    
+    // navigation props
+    public Patient? Patient { get; set; }
 }

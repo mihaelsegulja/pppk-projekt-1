@@ -33,12 +33,32 @@ internal static class UpdateBuilder
         var pkValue = pk.Property.GetValue(entity)
                       ?? throw new InvalidOperationException("Primary key value cannot be null for update.");
 
-        var sql = $@"
-UPDATE {entityMetadata.TableName}
-SET {string.Join(", ", setParts)}
-WHERE {pk.ColumnName} = {ToSqlHelper.FormatValue(pkValue)};
-";
+        var sql = $"""
+                   UPDATE {entityMetadata.TableName}
+                   SET {string.Join(", ", setParts)}
+                   WHERE {pk.ColumnName} = {ToSqlHelper.FormatValue(pkValue)};
+                   """;
 
         return sql;
+    }
+    
+    public static string UpdatePartial(object entity, EntityMetadata metadata, IReadOnlyDictionary<string, (object? Old, object? New)> changes)
+    {
+        if (changes.Count == 0)
+            throw new InvalidOperationException("No changes detected.");
+
+        var setClauses = changes.Select(c =>
+            $"{c.Key} = {ToSqlHelper.FormatValue(c.Value.New)}");
+
+        var pk = metadata.PrimaryKey
+                 ?? throw new InvalidOperationException("Entity has no PK");
+
+        var pkValue = pk.Property.GetValue(entity);
+
+        return $"""
+                UPDATE {metadata.TableName}
+                SET {string.Join(", ", setClauses)}
+                WHERE {pk.ColumnName} = {ToSqlHelper.FormatValue(pkValue)};
+                """;
     }
 }

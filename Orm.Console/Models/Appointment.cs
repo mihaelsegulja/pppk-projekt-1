@@ -24,4 +24,8 @@ public class Appointment
 
     [NotNull]
     public DateTime ScheduledAt { get; set; }
+    
+    // navigation props
+    public Patient? Patient { get; set; }
+    public Doctor? Doctor { get; set; }
 }

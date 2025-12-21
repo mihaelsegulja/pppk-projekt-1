@@ -20,4 +20,8 @@ public class MedicationPrescription
     [NotNull]
     [Default("once per day")]
     public string Frequency { get; set; }
+    
+    // navigation props
+    public Patient? Patient { get; set; }
+    public Medication? Medication { get; set; }
 }
