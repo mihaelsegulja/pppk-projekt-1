@@ -12,7 +12,7 @@ internal static class DeleteBuilder
         sb.Append($"DELETE FROM {metadata.TableName}");
 
         if (options == null)
-            return sb.Append(";").ToString();
+            return sb.Append(';').ToString();
         
         sb.Append(" WHERE ");
         sb.Append(string.Join(" AND ",
@@ -27,7 +27,7 @@ internal static class DeleteBuilder
                 return $"({conditions})";
             })));
 
-        return sb.Append(";").ToString();
+        return sb.Append(';').ToString();
     }
     
     public static string DeleteById(EntityMetadata metadata, object id)

@@ -22,8 +22,8 @@ internal static class InsertBuilder
             columnValues.Add(sqlValue);
         }
 
-        var names = string.Join(", ", columnNames);
-        var values = string.Join(", ", columnValues);
+        var names = string.Join(',', columnNames);
+        var values = string.Join(',', columnValues);
 
         return $"INSERT INTO {metadata.TableName} ({names}) VALUES ({values});";
     }

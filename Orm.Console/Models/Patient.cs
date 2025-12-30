@@ -27,4 +27,3 @@ public class Patient
     public string ResidenceAddress { get; set; }
     public string PermanentAddress { get; set; }
 }
-

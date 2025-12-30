@@ -18,11 +18,16 @@ internal static class CreateTableBuilder
         foreach (var column in entityMetadata.Columns)
         {
             var columnDef = new StringBuilder();
-            columnDef.Append($"{column.ColumnName} {column.DbType}");
+            
             if (column.IsAutoIncrement)
             {
-                columnDef.Append(" SERIAL");
+                columnDef.Append($"{column.ColumnName} SERIAL");
             }
+            else
+            {
+                columnDef.Append($"{column.ColumnName} {column.DbType}");
+            }
+
             if (column.IsPrimaryKey)
             {
                 columnDef.Append(" PRIMARY KEY");
@@ -60,7 +65,7 @@ internal static class CreateTableBuilder
         if (fkConstraints.Count != 0)
             columnDefinitions.AddRange(fkConstraints);
         
-        sql.AppendLine(string.Join(",\n", columnDefinitions));
+        sql.AppendLine(string.Join(',', columnDefinitions));
         sql.AppendLine(");");
 
         return sql.ToString();

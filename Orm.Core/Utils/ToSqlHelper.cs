@@ -4,24 +4,33 @@ namespace Orm.Core.Utils;
 
 internal static class ToSqlHelper
 {
-    public static string ToDbType(Type type) => type switch
+    public static string ToDbType(Type type)
     {
-        _ when type == typeof(int) => "INTEGER",
-        _ when type == typeof(long) => "BIGINT",
-        _ when type == typeof(decimal) => "DECIMAL",
-        _ when type == typeof(float) => "REAL",
-        _ when type == typeof(double) => "DOUBLE PRECISION",
-        _ when type == typeof(char) => "CHAR(1)",
-        _ when type == typeof(string) => "TEXT",
-        _ when type == typeof(DateTime) => "TIMESTAMP WITHOUT TIME ZONE",
-        _ when type == typeof(DateTimeOffset) => "TIMESTAMP WITH TIME ZONE",
-        _ when type == typeof(Guid) => "UUID",
-        _ => throw new NotSupportedException($"Unsupported type: {type}")
-    };
+        var actualType = Nullable.GetUnderlyingType(type) ?? type;
+        
+        if (actualType.IsEnum)
+            return "INTEGER";
+
+        return actualType switch
+        {
+            _ when actualType == typeof(int) => "INTEGER",
+            _ when actualType == typeof(long) => "BIGINT",
+            _ when actualType == typeof(decimal) => "DECIMAL",
+            _ when actualType == typeof(float) => "REAL",
+            _ when actualType == typeof(double) => "DOUBLE PRECISION",
+            _ when actualType == typeof(char) => "CHAR(1)",
+            _ when actualType == typeof(string) => "TEXT",
+            _ when actualType == typeof(DateTime) => "TIMESTAMP WITHOUT TIME ZONE",
+            _ when actualType == typeof(DateTimeOffset) => "TIMESTAMP WITH TIME ZONE",
+            _ when actualType == typeof(Guid) => "UUID",
+            _ => throw new NotSupportedException($"Unsupported type: {type}")
+        };
+    }
     
     public static string FormatValue(object? value) => value switch
     {
         null => "NULL",
+        Enum e => Convert.ToInt32(e).ToString(),
         string s => $"'{s.Replace("'", "''")}'",
         char c => $"'{c}'",
         bool b => b ? "TRUE" : "FALSE",

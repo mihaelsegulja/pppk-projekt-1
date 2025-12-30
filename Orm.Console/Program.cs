@@ -1,20 +1,35 @@
 ﻿using dotenv.net;
+using Spectre.Console;
 using Orm.Core;
-
-Console.WriteLine("Testing PostgreSQL connection...");
+using Orm.Console.Demo;
 
 DotEnv.Load();
 
+AnsiConsole.MarkupLine("[bold cyan]*** ORM Demo ***[/]");
+
+var connStr = Environment.GetEnvironmentVariable("PPPK_CONN");
+if (string.IsNullOrWhiteSpace(connStr))
+{
+    AnsiConsole.MarkupLine("[red]Missing PPPK_CONN[/]");
+    return;
+}
+
 try
 {
-    var connStr = Environment.GetEnvironmentVariable("PPPK_CONN")
-        ?? throw new Exception("Missing conn string");
+    using var orm = new OrmClient(connStr);
 
-    using var db = new OrmClient(connStr);
-    Console.WriteLine("Connection successful!");
-    
+    AnsiConsole.Status()
+        .Start("Running ORM demo...", _ =>
+        {
+            SchemaDemo.Run(orm);
+            SeedDemo.Run(orm);
+            CrudDemo.Run(orm);
+            IncludeDemo.Run(orm);
+        });
+
+    AnsiConsole.MarkupLine("[bold green]Demo finished successfully[/]");
 }
 catch (Exception ex)
 {
-    Console.WriteLine($"Connection failed: {ex.Message}");
+    AnsiConsole.WriteException(ex);
 }

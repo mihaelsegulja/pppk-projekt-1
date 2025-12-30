@@ -3,10 +3,9 @@ using System.Data;
 
 namespace Orm.Core.Connection;
 
-internal class DatabaseConnection : IDisposable
+internal class DatabaseConnection
 {
     private readonly string _connectionString;
-    private NpgsqlConnection? _connection;
 
     public DatabaseConnection(string connectionString)
     {
@@ -15,23 +14,8 @@ internal class DatabaseConnection : IDisposable
 
     public IDbConnection Open()
     {
-        _connection ??= new NpgsqlConnection(_connectionString);
-
-        if (_connection.State != ConnectionState.Open)
-            _connection.Open();
-
-        return _connection;
-    }
-
-    public void Close()
-    {
-        if (_connection?.State == ConnectionState.Open)
-            _connection.Close();
-    }
-
-    public void Dispose()
-    {
-        Close();
-        _connection?.Dispose();
+        var connection = new NpgsqlConnection(_connectionString);
+        connection.Open();
+        return connection;
     }
 }

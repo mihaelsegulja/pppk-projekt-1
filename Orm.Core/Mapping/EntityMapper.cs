@@ -18,6 +18,9 @@ internal class EntityMapper
 
         foreach (var property in type.GetProperties())
         {
+            if (IsNavigationProperty(property))
+                continue;
+            
             var column = BuildColumnMetadata(property);
             metadata.Columns.Add(column);
 
@@ -79,5 +82,19 @@ internal class EntityMapper
             IsForeignKey = isForeignKey,
             ForeignKeyReferenceType = fkType,
         };
+    }
+    
+    private static bool IsNavigationProperty(PropertyInfo property)
+    {
+        var type = property.PropertyType;
+        var actualType = Nullable.GetUnderlyingType(type) ?? type;
+
+        if (actualType == typeof(string))
+            return false;
+
+        if (actualType.IsValueType || actualType.IsEnum)
+            return false;
+
+        return actualType.IsClass;
     }
 }

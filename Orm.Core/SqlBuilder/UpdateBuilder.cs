@@ -35,7 +35,7 @@ internal static class UpdateBuilder
 
         var sql = $"""
                    UPDATE {entityMetadata.TableName}
-                   SET {string.Join(", ", setParts)}
+                   SET {string.Join(',', setParts)}
                    WHERE {pk.ColumnName} = {ToSqlHelper.FormatValue(pkValue)};
                    """;
 
@@ -57,7 +57,7 @@ internal static class UpdateBuilder
 
         return $"""
                 UPDATE {metadata.TableName}
-                SET {string.Join(", ", setClauses)}
+                SET {string.Join(',', setClauses)}
                 WHERE {pk.ColumnName} = {ToSqlHelper.FormatValue(pkValue)};
                 """;
     }

@@ -11,11 +11,11 @@ internal static class SelectBuilder
         var sb = new StringBuilder();
 
         sb.Append("SELECT ");
-        sb.Append(string.Join(", ", metadata.Columns.Select(c => c.ColumnName)));
+        sb.Append(string.Join(',', metadata.Columns.Select(c => c.ColumnName)));
         sb.Append($" FROM {metadata.TableName}");
         
         if (options == null)
-            return sb.Append(";").ToString();
+            return sb.Append(';').ToString();
 
         if (options.WhereGroups.Count != 0)
         {
@@ -37,7 +37,7 @@ internal static class SelectBuilder
         if (options.OrderBy.Count != 0)
         {
             sb.Append(" ORDER BY ");
-            sb.Append(string.Join(", ",
+            sb.Append(string.Join(',',
                 options.OrderBy.Select(o =>
                     $"{o.ColumnName} {ToSqlHelper.ToSqlOrder(o.OrderBy)}")));
         }
@@ -48,7 +48,7 @@ internal static class SelectBuilder
         if (options.Offset.HasValue)
             sb.Append($" OFFSET {options.Offset.Value}");
 
-        return sb.Append(";").ToString();
+        return sb.Append(';').ToString();
     }
     
     public static string SelectById(EntityMetadata metadata, object id)

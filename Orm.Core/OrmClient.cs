@@ -287,7 +287,6 @@ public class OrmClient : IDisposable, IOrmClient
     
     public void Dispose()
     {
-        _conn.Dispose();
         GC.SuppressFinalize(this);
     }
 }
