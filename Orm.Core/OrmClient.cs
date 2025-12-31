@@ -31,8 +31,29 @@ public class OrmClient : IDisposable, IOrmClient
     public void Insert<T>(T entity)
     {
         var metadata = _mapper.MapEntity(typeof(T));
+        var pk = metadata.PrimaryKey;
+
         var sql = InsertBuilder.Insert(entity, metadata);
-        ExecuteNonQuery(sql);
+
+        using var conn = _conn.Open();
+        using var cmd = conn.CreateCommand();
+        cmd.CommandText = sql;
+
+        if (pk.IsAutoIncrement)
+        {
+            var result = cmd.ExecuteScalar();
+            if (result != null)
+            {
+                var targetType = Nullable.GetUnderlyingType(pk.RuntimeType) ?? pk.RuntimeType;
+                var converted = Convert.ChangeType(result, targetType);
+                pk.Property.SetValue(entity, converted);
+            }
+        }
+        else
+        {
+            cmd.ExecuteNonQuery();
+        }
+
         _changeTracker.Track(entity, metadata);
     }
 

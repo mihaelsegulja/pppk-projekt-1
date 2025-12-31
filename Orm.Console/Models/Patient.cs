@@ -16,6 +16,7 @@ public class Patient
 
     [Unique]
     [NotNull]
+    [Column(Name = "oib")]
     public string OIB { get; set; }
 
     [NotNull]

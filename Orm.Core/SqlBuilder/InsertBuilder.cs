@@ -25,6 +25,13 @@ internal static class InsertBuilder
         var names = string.Join(',', columnNames);
         var values = string.Join(',', columnValues);
 
-        return $"INSERT INTO {metadata.TableName} ({names}) VALUES ({values});";
+        var sql = $"INSERT INTO {metadata.TableName} ({names}) VALUES ({values})";
+
+        if (metadata.PrimaryKey.IsAutoIncrement)
+        {
+            sql += $" RETURNING {metadata.PrimaryKey.ColumnName}";
+        }
+
+        return sql + ";";
     }
 }
