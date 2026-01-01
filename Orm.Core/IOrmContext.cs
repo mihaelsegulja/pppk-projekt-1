@@ -2,7 +2,7 @@
 
 namespace Orm.Core;
 
-public interface IOrmClient
+public interface IOrmContext
 {
     public void CreateTable<T>();
     public void Insert<T>(T entity);

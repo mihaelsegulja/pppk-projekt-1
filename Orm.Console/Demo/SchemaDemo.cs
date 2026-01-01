@@ -6,7 +6,7 @@ namespace Orm.Console.Demo;
 
 public static class SchemaDemo
 {
-    public static void Run(OrmClient orm)
+    public static void Run(OrmContext orm)
     {
         AnsiConsole.MarkupLine("[yellow]Creating tables...[/]");
 

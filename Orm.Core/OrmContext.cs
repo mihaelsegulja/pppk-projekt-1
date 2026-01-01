@@ -8,13 +8,13 @@ using Orm.Core.Utils;
 
 namespace Orm.Core;
 
-public class OrmClient : IDisposable, IOrmClient
+public class OrmContext : IDisposable, IOrmContext
 {
     private readonly DatabaseConnection _conn;
     private readonly EntityMapper _mapper;
     private readonly ChangeTracker _changeTracker;
 
-    public OrmClient(string connectionString)
+    public OrmContext(string connectionString)
     {
         _conn = new DatabaseConnection(connectionString);
         _mapper = new EntityMapper();
@@ -110,6 +110,26 @@ public class OrmClient : IDisposable, IOrmClient
         ExecuteNonQuery(sql);
     }
     
+    public void AddColumn<T>(string propertyName)
+    {
+        var metadata = _mapper.MapEntity(typeof(T));
+
+        var column = metadata.Columns
+                         .FirstOrDefault(c => c.Property.Name == propertyName)
+                     ?? throw new InvalidOperationException(
+                         $"Property {propertyName} not found on {typeof(T).Name}");
+
+        var sql = AlterTableBuilder.AddColumn(metadata, column);
+        ExecuteNonQuery(sql);
+    }
+
+    public void DropColumn<T>(string columnName)
+    {
+        var metadata = _mapper.MapEntity(typeof(T));
+        var sql = AlterTableBuilder.DropColumn(metadata, columnName);
+        ExecuteNonQuery(sql);
+    }
+    
     public void Remove<T>(T entity)
     {
         _changeTracker.MarkDeleted(entity!);
@@ -119,31 +139,39 @@ public class OrmClient : IDisposable, IOrmClient
     {
         int affected = 0;
         
-        foreach (var entity in _changeTracker.DeletedEntities().ToList())
+        foreach (var tracked in _changeTracker.DeletedEntities().ToList())
         {
-            var metadata = _mapper.MapEntity(entity.GetType());
+            var metadata = tracked.Metadata;
             var pk = metadata.PrimaryKey
                      ?? throw new InvalidOperationException("Entity has no PK");
 
-            var id = pk.Property.GetValue(entity);
+            var id = pk.Property.GetValue(tracked.Entity);
 
             var sql = DeleteBuilder.DeleteById(metadata, id!);
             ExecuteNonQuery(sql);
 
-            _changeTracker.ClearDeleted(entity);
+            _changeTracker.Detach(tracked.Entity);
             affected++;
         }
 
-        foreach (var (entity, metadata) in _changeTracker.TrackedEntities())
+        foreach (var tracked in _changeTracker.TrackedEntities())
         {
-            var changes = _changeTracker.DetectChanges(entity);
+            if (tracked.State != EntityState.Modified)
+                continue;
+
+            var changes = _changeTracker.DetectChanges(tracked.Entity);
             if (changes.Count == 0)
                 continue;
 
-            var sql = UpdateBuilder.UpdatePartial(entity, metadata, changes);
+            var sql = UpdateBuilder.UpdatePartial(
+                tracked.Entity,
+                tracked.Metadata,
+                changes
+            );
+
             ExecuteNonQuery(sql);
 
-            _changeTracker.AcceptChanges(entity, metadata);
+            _changeTracker.AcceptChanges(tracked);
             affected++;
         }
 

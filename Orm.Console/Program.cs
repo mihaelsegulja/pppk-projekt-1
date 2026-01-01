@@ -16,12 +16,13 @@ if (string.IsNullOrWhiteSpace(connStr))
 
 try
 {
-    using var orm = new OrmClient(connStr);
+    using var orm = new OrmContext(connStr);
 
     AnsiConsole.Status()
         .Start("Running ORM demo...", _ =>
         {
-            SchemaDemo.Run(orm);
+            MigrationDemo.Run(orm);
+            // SchemaDemo.Run(orm);
             SeedDemo.Run(orm);
             CrudDemo.Run(orm);
             IncludeDemo.Run(orm);
