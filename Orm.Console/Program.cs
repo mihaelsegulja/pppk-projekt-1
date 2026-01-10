@@ -1,13 +1,16 @@
-﻿using dotenv.net;
+﻿using Microsoft.Extensions.Configuration;
 using Spectre.Console;
 using Orm.Core;
 using Orm.Console.Demo;
 
-DotEnv.Load();
-
 AnsiConsole.MarkupLine("[bold cyan]*** ORM Demo ***[/]");
 
-var connStr = Environment.GetEnvironmentVariable("PPPK_CONN");
+var config = new ConfigurationBuilder() 
+    .SetBasePath(Directory.GetCurrentDirectory())
+    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+    .Build();
+
+var connStr = config.GetConnectionString("Default");
 if (string.IsNullOrWhiteSpace(connStr))
 {
     AnsiConsole.MarkupLine("[red]Missing PPPK_CONN[/]");
