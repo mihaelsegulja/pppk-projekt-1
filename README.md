@@ -8,6 +8,7 @@ This project is an **educational ORM implementation** created as part of a unive
 It is **not intended for production use**.
 
 The goal of this project was to explore how ORMs work internally:
+
 - metadata discovery
 - SQL generation
 - basic change tracking
@@ -15,8 +16,6 @@ The goal of this project was to explore how ORMs work internally:
 - entity materialization
 
 Some parts are intentionally simplified or incomplete in order to keep the scope reasonable for a semester project.
-
----
 
 ## Project Overview
 
@@ -27,8 +26,6 @@ It follows a **code-first mindset**, where entities defined in C# are mapped to 
 The project is split into:
 - **Orm.Core** – core ORM logic (metadata, SQL builders, tracking, migrations abstractions)
 - **Orm.Console** – console application used to demonstrate and test the ORM features
-
----
 
 ## Key Concepts
 
@@ -44,8 +41,6 @@ The project is split into:
 - **Manual migrations**
   - Schema changes are defined explicitly by the client.
 
----
-
 ## Features
 
 - Entity-to-table mapping via attributes and reflection
@@ -55,8 +50,6 @@ The project is split into:
 - Eager loading via `Include<T>()`
 - Simple migration execution
 - PostgreSQL support
-
----
 
 ## Known Limitations
 
@@ -76,8 +69,6 @@ Notable limitations include:
 
 These tradeoffs were made to keep the project understandable and focused on core ORM concepts.
 
----
-
 ## Why Build a Custom ORM?
 
 The purpose of this project was **learning**, not replacing existing solutions.
@@ -88,14 +79,10 @@ Building a custom ORM helps understand:
 - how migrations work under the hood
 - why production ORMs are large and complex systems
 
----
-
 ## Technologies Used
 
 - .NET
 - PostgreSQL
-
----
 
 ## Setup
 
