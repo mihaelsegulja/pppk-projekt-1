@@ -4,7 +4,7 @@ Custom ORM implementation and demonstration
 
 ## Disclaimer
 
-This project is an **educational ORM implementation** created as part of a university course.
+This project is an **educational ORM implementation** created as part of an university course.
 It is **not intended for production use**.
 
 The goal of this project was to explore how ORMs work internally:
