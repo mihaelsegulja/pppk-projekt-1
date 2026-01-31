@@ -6,7 +6,7 @@ using Orm.Console.Demo;
 AnsiConsole.MarkupLine("[bold cyan]*** ORM Demo ***[/]");
 
 var config = new ConfigurationBuilder() 
-    .SetBasePath(Directory.GetCurrentDirectory())
+    .SetBasePath(AppContext.BaseDirectory)
     .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
     .Build();
 
